@@ -12,4 +12,18 @@ export const countDepthIncreases = (input: number[]) => {
   }, 0);
 };
 
-console.log(countDepthIncreases(getInput(1)));
+export const countDepthIncreasesInThreeMeasurementSlidingWindow = (input: number[]) => {
+  const threeValueSum = input
+    .map<number | undefined>((value, index, arr) => {
+      const valueMinusOne = arr[index - 1];
+      const valueMinusTwo = arr[index - 2];
+
+      if (!valueMinusOne || !valueMinusTwo || !value) {
+        return;
+      }
+      return valueMinusTwo + valueMinusOne + value;
+    })
+    .filter((e: number | undefined): e is number => Boolean(e));
+
+  return countDepthIncreases(threeValueSum);
+};
