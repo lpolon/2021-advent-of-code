@@ -1,19 +1,22 @@
-import { getInput } from 'src/helper/getInput';
+const parseInput = (input: string): number[] => input.split(/\n/).map(Number);
 
-export const countDepthIncreases = (input: number[]) => {
+const countDepthIncreasesFromNumbers = (input: number[]): number => {
   return input.reduce<number>((acc, value, index, arr) => {
     const prevValue = arr[index - 1];
-
-    if (!prevValue) return acc;
-
-    if (value - prevValue > 0) return acc + 1;
-
+    if (value - prevValue > 0) acc += 1;
     return acc;
   }, 0);
 };
 
-export const countDepthIncreasesInThreeMeasurementSlidingWindow = (input: number[]) => {
-  const threeValueSum = input
+export const countDepthIncreases = (input: string) => {
+  const values = parseInput(input);
+  return countDepthIncreasesFromNumbers(values);
+};
+
+export const countDepthIncreasesInThreeMeasurementSlidingWindow = (input: string) => {
+  const values = parseInput(input);
+
+  const threeValueSum = values
     .map<number | undefined>((value, index, arr) => {
       const valueMinusOne = arr[index - 1];
       const valueMinusTwo = arr[index - 2];
@@ -25,5 +28,5 @@ export const countDepthIncreasesInThreeMeasurementSlidingWindow = (input: number
     })
     .filter((e: number | undefined): e is number => Boolean(e));
 
-  return countDepthIncreases(threeValueSum);
+  return countDepthIncreasesFromNumbers(threeValueSum);
 };

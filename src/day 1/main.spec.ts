@@ -1,6 +1,6 @@
 import { countDepthIncreases, countDepthIncreasesInThreeMeasurementSlidingWindow } from './main';
-import { getInput } from 'src/helper/getInput';
-const input = [199, 200, 208, 210, 200, 207, 240, 269, 260, 263];
+import { fetchInput } from 'src/helper/fetchInput';
+const input = '199\n200\n208\n210\n200\n207\n240\n269\n260\n263';
 
 test('day 1-1 example', () => {
   const result = countDepthIncreases(input);
@@ -8,7 +8,7 @@ test('day 1-1 example', () => {
 });
 
 test('day 1-1 input result', () => {
-  console.log(countDepthIncreases(getInput(1)));
+  expect(countDepthIncreases(fetchInput(1))).toMatchInlineSnapshot(`1754`);
 });
 
 test('day 1-2 example', () => {
@@ -17,5 +17,7 @@ test('day 1-2 example', () => {
 });
 
 test('day 1-2 input result', () => {
-  console.log(countDepthIncreasesInThreeMeasurementSlidingWindow(getInput(1)));
+  expect(countDepthIncreasesInThreeMeasurementSlidingWindow(fetchInput(1))).toMatchInlineSnapshot(
+    `1789`,
+  );
 });
