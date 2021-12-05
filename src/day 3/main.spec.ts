@@ -1,33 +1,29 @@
 import fetchInput from 'src/helper/fetchInput';
 import {
-  buildBitFrequencyPerPosition,
+  // buildBitFrequencyPerPosition,
   calcEpsilonRate,
   calcGammaRate,
   calcPowerConsumption,
+  getBitNumberLength,
+  getModalBitByIndex,
 } from './main';
 
 const buildExampleInput = () =>
   '00100\n11110\n10110\n10111\n10101\n01111\n00111\n11100\n10000\n11001\n00010\n01010';
 
-describe('buildBitFrequencyPerPosition', () => {
-  it('returns an array with length equal the number of bits', () => {
-    const input = buildExampleInput();
-    const expectedLength = input.split(/\n/)[0].length;
+test('getBitNumberLength should return expected value', () => {
+  const input = buildExampleInput();
+  const output = getBitNumberLength(input);
+  expect(output).toBe(5);
+});
 
-    const output = buildBitFrequencyPerPosition(input);
-    expect(output.length).toBe(expectedLength);
-  });
-  it('returns arr of object with frequency of 0 and 1 in its respective positions', () => {
-    const input = buildExampleInput();
-    const [firstPos, secondPos, thirdPos, fourthPos, fifthPos] =
-      buildBitFrequencyPerPosition(input);
-
-    expect(firstPos).toEqual({ 0: 5, 1: 7 });
-    expect(secondPos).toEqual({ 0: 7, 1: 5 });
-    expect(thirdPos).toEqual({ 0: 4, 1: 8 });
-    expect(fourthPos).toEqual({ 0: 5, 1: 7 });
-    expect(fifthPos).toEqual({ 0: 7, 1: 5 });
-  });
+test('getModalBitByIndex return the most common bit value given an index', () => {
+  const input = buildExampleInput();
+  expect(getModalBitByIndex(input, 0)).toBe('1');
+  expect(getModalBitByIndex(input, 1)).toBe('0');
+  expect(getModalBitByIndex(input, 2)).toBe('1');
+  expect(getModalBitByIndex(input, 3)).toBe('1');
+  expect(getModalBitByIndex(input, 4)).toBe('0');
 });
 
 test('calcGammaRate works', () => {
@@ -43,13 +39,16 @@ test('calcEpsilonRate works', () => {
   expect(output).toBe(9);
 });
 
-test('day 3-1 input result', () => {
+xtest('day 3-1 input result', () => {
   const input = fetchInput(3);
   const output = calcPowerConsumption(input);
 
   expect(output).toMatchInlineSnapshot(`3309596`);
 });
 
-describe ('the o2 generator rating', () => {
-
-})
+xdescribe('the o2 generator rating', () => {
+  it('lala', () => {
+    const input = buildExampleInput();
+    // getO2GenRating(input);
+  });
+});
