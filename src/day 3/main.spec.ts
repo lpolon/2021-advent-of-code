@@ -1,11 +1,14 @@
 import fetchInput from 'src/helper/fetchInput';
 import {
-  // buildBitFrequencyPerPosition,
   calcEpsilonRate,
   calcGammaRate,
   calcPowerConsumption,
   getBitNumberLength,
+  getCO2ScrubberRating,
+  getLifeSupportRating,
   getModalBitByIndex,
+  getOxyGenRating,
+  parseInput,
 } from './main';
 
 const buildExampleInput = () =>
@@ -19,11 +22,12 @@ test('getBitNumberLength should return expected value', () => {
 
 test('getModalBitByIndex return the most common bit value given an index', () => {
   const input = buildExampleInput();
-  expect(getModalBitByIndex(input, 0)).toBe('1');
-  expect(getModalBitByIndex(input, 1)).toBe('0');
-  expect(getModalBitByIndex(input, 2)).toBe('1');
-  expect(getModalBitByIndex(input, 3)).toBe('1');
-  expect(getModalBitByIndex(input, 4)).toBe('0');
+  const bitNumbers = parseInput(input);
+  expect(getModalBitByIndex(bitNumbers, 0)).toBe('1');
+  expect(getModalBitByIndex(bitNumbers, 1)).toBe('0');
+  expect(getModalBitByIndex(bitNumbers, 2)).toBe('1');
+  expect(getModalBitByIndex(bitNumbers, 3)).toBe('1');
+  expect(getModalBitByIndex(bitNumbers, 4)).toBe('0');
 });
 
 test('calcGammaRate works', () => {
@@ -39,16 +43,40 @@ test('calcEpsilonRate works', () => {
   expect(output).toBe(9);
 });
 
-xtest('day 3-1 input result', () => {
+test('day 3-1 input result', () => {
   const input = fetchInput(3);
   const output = calcPowerConsumption(input);
 
   expect(output).toMatchInlineSnapshot(`3309596`);
 });
 
-xdescribe('the o2 generator rating', () => {
-  it('lala', () => {
-    const input = buildExampleInput();
-    // getO2GenRating(input);
-  });
+test('the o2 generator rating works as expect', () => {
+  const input = buildExampleInput();
+  const output = getOxyGenRating(input);
+
+  console.log(output);
+  expect(output).toBe(23);
+});
+
+test('the CO2 scrubbing rating works as expect', () => {
+  const input = buildExampleInput();
+  const output = getCO2ScrubberRating(input);
+
+  console.log(output);
+  expect(output).toBe(10);
+});
+
+test('day 3-2 example result', () => {
+  const input = buildExampleInput();
+
+  const output = getLifeSupportRating(input);
+
+  expect(output).toMatchInlineSnapshot(`230`);
+});
+
+test('day 3-2 input result', () => {
+  const input = fetchInput(3);
+  const output = getLifeSupportRating(input);
+
+  expect(output).toMatchInlineSnapshot(`2981085`);
 });

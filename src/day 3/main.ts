@@ -6,7 +6,11 @@ type BitFrequencyHt = {
 
 type BitCriteria = {
   defaultValue: BitValues;
-  createFilterCb: (modalBit: BitValues, bitPositionIndex: number) => (value: string) => boolean;
+  createFilterCb: (
+    modalBit: BitValues | null,
+    bitPositionIndex: number,
+    defaultValue: BitValues,
+  ) => (value: string) => boolean;
 };
 
 export const parseInput = (input: string): string[] => input.split(/\n/);
@@ -85,9 +89,9 @@ A grande diferença entre a parte 1 e a parte 2 é que o array muda a cada itera
 
 export const getOxyGenRating = (input: string): number => {
   const createFilterCb: BitCriteria['createFilterCb'] =
-    (modalBit: BitValues, index: number) => (number: string) => {
+    (modalBit, index, defaultValue) => (number: string) => {
       const currentBitValue = number[index];
-      return currentBitValue === modalBit;
+      return currentBitValue === (modalBit ?? defaultValue);
     };
 
   const bitNumbers = parseInput(input);
@@ -99,6 +103,34 @@ export const getOxyGenRating = (input: string): number => {
       defaultValue: '1',
     },
   });
+};
+
+export const getCO2ScrubberRating = (input: string): number => {
+  const createFilterCb: BitCriteria['createFilterCb'] =
+    (modalBit, index, defaultValue) => (number: string) => {
+      const currentBitValue = number[index];
+      if (modalBit === null) {
+        return currentBitValue === defaultValue;
+      }
+      return currentBitValue !== modalBit;
+    };
+
+  const bitNumbers = parseInput(input);
+
+  return findBitNumber({
+    bitNumbers,
+    bitCriteria: {
+      createFilterCb,
+      defaultValue: '0',
+    },
+  });
+};
+
+export const getLifeSupportRating = (input: string): number => {
+  const CO2ScrubberRating = getCO2ScrubberRating(input);
+  const O2GenRating = getOxyGenRating(input);
+
+  return CO2ScrubberRating * O2GenRating;
 };
 
 function findBitNumber({
@@ -116,9 +148,9 @@ function findBitNumber({
 
   const { createFilterCb, defaultValue } = bitCriteria;
 
-  const modalBitValue = getModalBitByIndex(bitNumbers, index) ?? defaultValue;
+  const modalBitValue = getModalBitByIndex(bitNumbers, index);
 
-  const filteredBitNumbers = bitNumbers.filter(createFilterCb(modalBitValue, index));
+  const filteredBitNumbers = bitNumbers.filter(createFilterCb(modalBitValue, index, defaultValue));
 
   return findBitNumber({ bitNumbers: filteredBitNumbers, bitCriteria, index: index + 1 });
 }
