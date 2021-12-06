@@ -54,7 +54,6 @@ test('the o2 generator rating works as expect', () => {
   const input = buildExampleInput();
   const output = getOxyGenRating(input);
 
-  console.log(output);
   expect(output).toBe(23);
 });
 
@@ -62,7 +61,6 @@ test('the CO2 scrubbing rating works as expect', () => {
   const input = buildExampleInput();
   const output = getCO2ScrubberRating(input);
 
-  console.log(output);
   expect(output).toBe(10);
 });
 

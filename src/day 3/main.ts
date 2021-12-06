@@ -77,16 +77,6 @@ export const calcPowerConsumption = (input: string): number => {
   return epsilonRate * gammaRate;
 };
 
-// Day 3 - 2 -- i should split these files
-
-/*
-the biggest difference between part 1 and 2 is that the array changes after each iteration
-A grande diferença entre a parte 1 e a parte 2 é que o array muda a cada iteração na parte dois. utiliza-se o array filtrado.
-*/
-
-// fazer depois
-// const handleRatings = () => {}
-
 export const getOxyGenRating = (input: string): number => {
   const createFilterCb: BitCriteria['createFilterCb'] =
     (modalBit, index, defaultValue) => (number: string) => {
