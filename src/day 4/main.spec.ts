@@ -13,30 +13,7 @@ test('parse Input works as expected', () => {
     7, 4, 9, 5, 11, 17, 23, 2, 0, 14, 21, 24, 10, 16, 13, 6, 15, 25, 12, 22, 18, 20, 8, 19, 3, 26,
     1,
   ]);
-  expect(bingoBoards[0][0]).toMatchInlineSnapshot(`
-Array [
-  Object {
-    "isMarked": false,
-    "value": 22,
-  },
-  Object {
-    "isMarked": false,
-    "value": 13,
-  },
-  Object {
-    "isMarked": false,
-    "value": 17,
-  },
-  Object {
-    "isMarked": false,
-    "value": 11,
-  },
-  Object {
-    "isMarked": false,
-    "value": 0,
-  },
-]
-`);
+  expect(bingoBoards[0]._flattenedCells.length).toEqual(25);
 });
 xtest('parse Input works as expected 2', () => {
   // const input = buildExampleInput();
