@@ -77,18 +77,29 @@ export class Board {
   }
 }
 
-// const parseBoards = (boards: string[]): Board[] => {
-//   return boards.map((board) => new Board(board));
-// };
+export class Game {
+  private _boards: Board[];
+  private _drawnNumbers: number[];
+  constructor(input: string) {
+    const { bingoBoards, drawnNumbers } = parseInput(input);
+    this._boards = bingoBoards.map((board) => new Board(board));
+    this._drawnNumbers = drawnNumbers;
+  }
+  play() {}
+}
 
-// export const parseInput = (input: string): { drawnNumbers: DrawnNumbers; bingoBoards: Board[] } => {
-//   const [drawnNumbersStr, ...boards] = input.split(/\n\n/);
-//   const drawnNumbers = drawnNumbersStr.split(/,/).map(Number);
-//   const bingoBoards = parseBoards(boards);
-//   return {
-//     drawnNumbers,
-//     bingoBoards,
-//   };
-// };
+function parseInput(input: string): { drawnNumbers: DrawnNumbers; bingoBoards: number[][][] } {
+  const [drawnNumbersStr, ...boards] = input.split(/\n\n/);
+  const drawnNumbers = drawnNumbersStr.split(/,/).map(Number);
+  const bingoBoards = parseBoards(boards);
+  return {
+    drawnNumbers,
+    bingoBoards,
+  };
+}
 
-const updateBoards = (number: number, boards: Board[]): void => {};
+function parseBoards(boards: string[]): number[][][] {
+  return boards.map((board) => {
+    return board.split(/\n/).map((row) => row.split(/\s/).filter(Boolean).map(Number));
+  });
+}
