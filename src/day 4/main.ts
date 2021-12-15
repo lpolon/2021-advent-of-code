@@ -6,11 +6,11 @@ I liked the class approach because it handles the mutation of the boards in a cl
 The fact that the board inside the Board class is flattened is pretty neat. I definitely would not have thought of it myself. I felt like a cheated in this one, but it was enlightening.
 */
 
+import { transpose } from './helpers';
+
 type DrawnNumbers = number[];
 
-type BingoBoard = Cell[][];
-
-class Cell {
+export class Cell {
   private _value: number;
   private _isMarked: boolean;
 
@@ -32,26 +32,36 @@ class Cell {
   }
 }
 
-class Board {
+export class Board {
   // TODO: board não flatten
   // columns
   // rows
-  _flattenedCells: Cell[];
+  private _flattenedCells: Cell[];
+  private _rows: Cell[][];
+  private _columns: Cell[][];
+
   constructor(values: string) {
-    this._flattenedCells = values
-      .split(/\n/)
-      .map<Cell[]>((row) =>
-        row
-          .split(/\s/)
-          .filter(Boolean)
-          .map(Number)
-          .map((cellValue) => new Cell(cellValue)),
-      )
-      .flat();
+    const cells = values.split(/\n/).map<Cell[]>((row) =>
+      row
+        .split(/\s/)
+        .filter(Boolean)
+        .map(Number)
+        .map((cellValue) => new Cell(cellValue)),
+    );
+
+    this._flattenedCells = cells.flat();
+    this._rows = cells;
+    this._columns = transpose(cells);
   }
 
-  mark(number: number): void {
+  public mark(number: number): void {
     this._flattenedCells.find((cell) => cell.value === number)?.mark();
+  }
+  public get isWinner(): boolean {
+    return (
+      this._rows.some((row) => row.every((cell) => cell.isMarked)) ||
+      this._columns.some((column) => column.every((cell) => cell.isMarked))
+    );
   }
 }
 
