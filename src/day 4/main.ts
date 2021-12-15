@@ -40,15 +40,18 @@ export class Board {
   private _rows: Cell[][];
   private _columns: Cell[][];
 
-  constructor(values: string) {
-    const cells = values.split(/\n/).map<Cell[]>((row) =>
-      row
-        .split(/\s/)
-        .filter(Boolean)
-        .map(Number)
-        .map((cellValue) => new Cell(cellValue)),
-    );
+  constructor(boardValues: number[][]) {
+    // converter os values em string
+    // const cells = values.split(/\n/).map<Cell[]>((row) =>
+    //   row
+    //     .split(/\s/)
+    //     .filter(Boolean)
+    //     .map(Number)
+    // TODO: Essa última linha faz as Cells. O resto vai para outra função
+    //     .map((cellValue) => new Cell(cellValue)),
+    // );
 
+    const cells = boardValues.map((rows) => rows.map((cell) => new Cell(cell)));
     this._flattenedCells = cells.flat();
     this._rows = cells;
     this._columns = transpose(cells);
@@ -63,20 +66,29 @@ export class Board {
       this._columns.some((column) => column.every((cell) => cell.isMarked))
     );
   }
+
+  public get unmarkedSum() {
+    return this._flattenedCells.reduce((acc, cell) => {
+      if (!cell.isMarked) {
+        acc += cell.value;
+      }
+      return acc;
+    }, 0);
+  }
 }
 
-const parseBoards = (boards: string[]): Board[] => {
-  return boards.map((board) => new Board(board));
-};
+// const parseBoards = (boards: string[]): Board[] => {
+//   return boards.map((board) => new Board(board));
+// };
 
-export const parseInput = (input: string): { drawnNumbers: DrawnNumbers; bingoBoards: Board[] } => {
-  const [drawnNumbersStr, ...boards] = input.split(/\n\n/);
-  const drawnNumbers = drawnNumbersStr.split(/,/).map(Number);
-  const bingoBoards = parseBoards(boards);
-  return {
-    drawnNumbers,
-    bingoBoards,
-  };
-};
+// export const parseInput = (input: string): { drawnNumbers: DrawnNumbers; bingoBoards: Board[] } => {
+//   const [drawnNumbersStr, ...boards] = input.split(/\n\n/);
+//   const drawnNumbers = drawnNumbersStr.split(/,/).map(Number);
+//   const bingoBoards = parseBoards(boards);
+//   return {
+//     drawnNumbers,
+//     bingoBoards,
+//   };
+// };
 
 const updateBoards = (number: number, boards: Board[]): void => {};
