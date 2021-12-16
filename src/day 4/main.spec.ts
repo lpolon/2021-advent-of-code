@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import fetchInput from 'src/helper/fetchInput';
-import { Cell, Board, Game } from './main';
+import { Cell, Board, Game, PlayOutcomes } from './main';
 /*
 I fell that I am not really thinking much by myself anymore for this one. I guess I will kinda copy how Guy did TDD in this one to get more familiar.
 */
@@ -178,12 +178,26 @@ describe('Game', () => {
     const input = fetchExampleInput();
     game = new Game(input);
   });
-  describe('when played', () => {
-    beforeEach(() => {
-      game.play();
-    });
-    xit('returns the unmarked sum of the winner', () => {});
-    xit('returns the winning roll', () => {});
-    xit('returns the winning score', () => {});
+  it('when played returns the winning score of the first board', () => {
+    const gameResult = game.playToWin() as Extract<PlayOutcomes, { status: 'HAS_WINNER' }>;
+    expect(gameResult.winningScore).toBe(4512);
   });
+  it('when played returns the winning score of the last winning board', () => {
+    const gameResult = game.playToLose() as Extract<PlayOutcomes, { status: 'HAS_WINNER' }>;
+    expect(gameResult.winningScore).toBe(1924);
+  });
+});
+
+test('day 4 - 1 result', () => {
+  const input = fetchInput(4);
+  const game = new Game(input);
+  const gameResult = game.playToWin() as Extract<PlayOutcomes, { status: 'HAS_WINNER' }>;
+  expect(gameResult.winningScore).toMatchInlineSnapshot(`74320`);
+});
+
+test('day 4 - 2 result', () => {
+  const input = fetchInput(4);
+  const game = new Game(input);
+  const gameResult = game.playToLose() as Extract<PlayOutcomes, { status: 'HAS_WINNER' }>;
+  expect(gameResult.winningScore).toMatchInlineSnapshot(`17884`);
 });
