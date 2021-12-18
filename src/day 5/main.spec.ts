@@ -1,13 +1,19 @@
 import fs from 'fs';
 import path from 'path';
-import { buildDiagram, parseInput } from './main';
+import { buildDiagram, getSumOfDangerousPoints, parseInput } from './main';
 
 const fetchExampleInput = () =>
   fs.readFileSync(path.resolve(__dirname, './example.input.txt'), 'utf-8');
 
-/*
+const buildXKCoordsList = () => [
+  { x1: 3, y1: 1, x2: 3, y2: 5 },
+  { x1: 2, y1: 2, x2: 2, y2: 1 },
+];
 
-*/
+const buildYKCoordsList = () => [
+  { x1: 0, y1: 5, x2: 5, y2: 5 },
+  { x1: 5, y1: 4, x2: 3, y2: 4 },
+];
 
 const buildCoordsList = () => [
   { x1: 0, y1: 5, x2: 5, y2: 5 },
@@ -22,61 +28,68 @@ test('parse input works', () => {
   expect(output).toMatchSnapshot();
 });
 
-test('build diagram', () => {
+test('build x coords works', () => {
+  const input = buildYKCoordsList();
+  const output = buildDiagram(input);
+  expect(output).toEqual([
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1],
+  ]);
+});
+test('build y coords works', () => {
+  const input = buildXKCoordsList();
+  const output = buildDiagram(input);
+  expect(output).toEqual([
+    [0, 0, 0, 0],
+    [0, 0, 1, 1],
+    [0, 0, 1, 1],
+    [0, 0, 0, 1],
+    [0, 0, 0, 1],
+    [0, 0, 0, 1],
+  ]);
+});
+
+test('build diagram works', () => {
   const coordsList = buildCoordsList();
   const output = buildDiagram(coordsList);
-  /*
-  - x ou y é constante.
-  - encontre o constante e acesse a linha ou coluna.
-  - itera sobre a diferença dos dois.. como?
-    - se for negativo. itera do maior pro menor
-    - se for positivo. do menor pro maior.
-  */
-  expect(output).toMatchInlineSnapshot(`
-[
-  [
-    ,
-    ,
-    0,
-  ],
-  [
-    ,
-    ,
-    0,
-    0,
-  ],
-  [
-    ,
-    ,
-    ,
-    0,
-  ],
-  [
-    ,
-    ,
-    ,
-    0,
-  ],
-  [
-    ,
-    ,
-    2,
-    0,
-  ],
-  [
-    ,
-    5,
-    ,
-    0,
-  ],
-]
-`);
-  // expect(output).toEqual([
-  //   [0, 0, 0, 0, 0, 0],
-  //   [0, 0, 1, 1, 0, 0],
-  //   [0, 0, 1, 1, 0, 0],
-  //   [0, 0, 0, 1, 0, 0],
-  //   [0, 0, 0, 2, 1, 1],
-  //   [1, 1, 1, 2, 1, 1],
-  // ]);
+
+  console.log('oioioi', output);
+  expect(output).toEqual([
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 1, 1, 0, 0],
+    [0, 0, 1, 1, 0, 0],
+    [0, 0, 0, 1, 0, 0],
+    [0, 0, 0, 2, 1, 1],
+    [1, 1, 1, 2, 1, 1],
+  ]);
 });
+
+test.only('build diagram with exemple input', () => {
+  const input = fetchExampleInput();
+  const coordsList = parseInput(input);
+  const diagram = buildDiagram(coordsList);
+  // o que está duplicando o array?
+  console.log(diagram);
+
+  expect(diagram).toEqual([
+    [0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
+    [0, 0, 1, 0, 0, 0, 0, 1, 0, 0],
+    [0, 0, 1, 0, 0, 0, 0, 1, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
+    [0, 1, 1, 2, 1, 1, 1, 2, 1, 1],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [2, 2, 2, 1, 1, 1, 0, 0, 0, 0],
+  ]);
+});
+// test('day 5 - 1 test input works', () => {
+//   const input = fetchExampleInput();
+//   const output = getSumOfDangerousPoints(input);
+//   expect(output).toMatchInlineSnapshot(`18`);
+// });
