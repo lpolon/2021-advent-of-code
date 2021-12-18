@@ -12,28 +12,28 @@ test('day 2 parse input should work as expected', () => {
   const input = buildInputExample();
   const output = parseInput(input);
   expect(output).toMatchInlineSnapshot(`
-Array [
-  Object {
+[
+  {
     "direction": "forward",
     "distance": 5,
   },
-  Object {
+  {
     "direction": "down",
     "distance": 5,
   },
-  Object {
+  {
     "direction": "forward",
     "distance": 8,
   },
-  Object {
+  {
     "direction": "up",
     "distance": 3,
   },
-  Object {
+  {
     "direction": "down",
     "distance": 8,
   },
-  Object {
+  {
     "direction": "forward",
     "distance": 2,
   },
