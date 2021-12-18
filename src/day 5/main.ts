@@ -9,7 +9,7 @@ export const parseInput = (input: string): Coords[] => {
   const coords: Coords[] = [];
 
   for (const coordSet of input.split(/\n/)) {
-    const matchResult = coordSet.match(/(^.),(.)\s->\s(.),(.)/);
+    const matchResult = coordSet.match(/(^.+),(.+)\s->\s(.+),(.+)/);
     if (!matchResult) {
       continue;
     }
@@ -77,13 +77,13 @@ const setXCoord = (
 };
 
 export const buildDiagram = (coordsList: Coords[]): number[][] => {
-  // TODO: alguma merda aqui
   const diagram = buildDefaultDiagram(coordsList);
-  console.log('oioioioioi', diagram);
   coordsList.forEach(({ x1, x2, y1, y2 }) => {
-    if (x1 === x2) {
+    const isXConstant = x1 === x2;
+    const isYConstant = y1 === y2;
+    if (isXConstant) {
       setYCoord(diagram, { xIndex: x1, y1, y2 });
-    } else {
+    } else if (isYConstant) {
       setXCoord(diagram, { yIndex: y1, x1, x2 });
     }
   });
@@ -93,7 +93,6 @@ export const buildDiagram = (coordsList: Coords[]): number[][] => {
 export const getSumOfDangerousPoints = (input: string): number => {
   const coordsList = parseInput(input);
   const diagram = buildDiagram(coordsList);
-  console.log(diagram);
   return diagram.flat().reduce<number>((acc, curr) => {
     if (curr > 1) acc += 1;
     return acc;

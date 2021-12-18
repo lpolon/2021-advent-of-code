@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import fetchInput from 'src/helper/fetchInput';
 import { buildDiagram, getSumOfDangerousPoints, parseInput } from './main';
 
 const fetchExampleInput = () =>
@@ -57,7 +58,6 @@ test('build diagram works', () => {
   const coordsList = buildCoordsList();
   const output = buildDiagram(coordsList);
 
-  console.log('oioioi', output);
   expect(output).toEqual([
     [0, 0, 0, 0, 0, 0],
     [0, 0, 1, 1, 0, 0],
@@ -68,12 +68,10 @@ test('build diagram works', () => {
   ]);
 });
 
-test.only('build diagram with exemple input', () => {
+test('build diagram with exemple input', () => {
   const input = fetchExampleInput();
   const coordsList = parseInput(input);
   const diagram = buildDiagram(coordsList);
-  // o que está duplicando o array?
-  console.log(diagram);
 
   expect(diagram).toEqual([
     [0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
@@ -88,8 +86,14 @@ test.only('build diagram with exemple input', () => {
     [2, 2, 2, 1, 1, 1, 0, 0, 0, 0],
   ]);
 });
-// test('day 5 - 1 test input works', () => {
-//   const input = fetchExampleInput();
-//   const output = getSumOfDangerousPoints(input);
-//   expect(output).toMatchInlineSnapshot(`18`);
-// });
+test('day 5 - 1 test input works', () => {
+  const input = fetchExampleInput();
+  const output = getSumOfDangerousPoints(input);
+  expect(output).toMatchInlineSnapshot(`5`);
+});
+
+test('day 5 - 1 result', () => {
+  const input = fetchInput(5);
+  const output = getSumOfDangerousPoints(input);
+  expect(output).toMatchInlineSnapshot(`7438`);
+});
