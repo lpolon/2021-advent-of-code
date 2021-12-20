@@ -40,51 +40,24 @@ export const buildDefaultDiagram = (coordsList: Coords[]): number[][] => {
   return [...Array(yMax + 1)].map(() => [...xArr]);
 };
 
-const setYCoord = (
-  diagram: number[][],
-  { xIndex, y1, y2 }: { xIndex: number; y1: number; y2: number },
-): void => {
-  const yDelta = y2 - y1;
-  if (yDelta > 0) {
-    const yInitial = y1;
-    for (let i = 0; i <= yDelta; i += 1) {
-      diagram[yInitial + i][xIndex] += 1;
-    }
-  } else {
-    const yInitial = y2;
-    for (let i = Math.abs(yDelta); i >= 0; i -= 1) {
-      diagram[yInitial + i][xIndex] += 1;
-    }
-  }
-};
-
-const setXCoord = (
-  diagram: number[][],
-  { yIndex, x1, x2 }: { yIndex: number; x1: number; x2: number },
-): void => {
-  const xDelta = x2 - x1;
-  if (xDelta > 0) {
-    const xInitial = x1;
-    for (let i = 0; i <= xDelta; i += 1) {
-      diagram[yIndex][xInitial + i] += 1;
-    }
-  } else {
-    const xInitial = x2;
-    for (let i = Math.abs(xDelta); i >= 0; i -= 1) {
-      diagram[yIndex][xInitial + i] += 1;
-    }
-  }
-};
-
 export const buildDiagram = (coordsList: Coords[]): number[][] => {
   const diagram = buildDefaultDiagram(coordsList);
   coordsList.forEach(({ x1, x2, y1, y2 }) => {
     const isXConstant = x1 === x2;
     const isYConstant = y1 === y2;
+
+    const xDelta = x1 - x2;
+    const yDelta = y1 - y2;
     if (isXConstant) {
-      setYCoord(diagram, { xIndex: x1, y1, y2 });
+      for (let i = 0; i <= Math.abs(yDelta); i += 1) {
+        const y = yDelta < 0 ? y1 + i : y1 - i;
+        diagram[y][x1] += 1;
+      }
     } else if (isYConstant) {
-      setXCoord(diagram, { yIndex: y1, x1, x2 });
+      for (let i = 0; i <= Math.abs(xDelta); i += 1) {
+        const x = xDelta < 0 ? x1 + i : x1 - i;
+        diagram[y1][x] += 1;
+      }
     }
   });
   return diagram;
@@ -93,6 +66,43 @@ export const buildDiagram = (coordsList: Coords[]): number[][] => {
 export const getSumOfDangerousPoints = (input: string): number => {
   const coordsList = parseInput(input);
   const diagram = buildDiagram(coordsList);
+  return diagram.flat().reduce<number>((acc, curr) => {
+    if (curr > 1) acc += 1;
+    return acc;
+  }, 0);
+};
+
+export const buildDiagramWithDiagonals = (coordsList: Coords[]): number[][] => {
+  const diagram = buildDefaultDiagram(coordsList);
+  coordsList.forEach(({ x1, x2, y1, y2 }) => {
+    const isXConstant = x1 === x2;
+    const isYConstant = y1 === y2;
+    const xDelta = x1 - x2;
+    const yDelta = y1 - y2;
+    if (isXConstant) {
+      for (let i = 0; i <= Math.abs(yDelta); i += 1) {
+        const y = yDelta < 0 ? y1 + i : y1 - i;
+        diagram[y][x1] += 1;
+      }
+    } else if (isYConstant) {
+      for (let i = 0; i <= Math.abs(xDelta); i += 1) {
+        const x = xDelta < 0 ? x1 + i : x1 - i;
+        diagram[y1][x] += 1;
+      }
+    } else if (!isXConstant && !isYConstant) {
+      for (let i = 0; i <= Math.abs(xDelta); i += 1) {
+        const x = xDelta < 0 ? x1 + i : x1 - i;
+        const y = yDelta < 0 ? y1 + i : y1 - i;
+        diagram[y][x] += 1;
+      }
+    }
+  });
+  return diagram;
+};
+
+export const getSumOfDangerousPointsWithDiagonals = (input: string): number => {
+  const coordsList = parseInput(input);
+  const diagram = buildDiagramWithDiagonals(coordsList);
   return diagram.flat().reduce<number>((acc, curr) => {
     if (curr > 1) acc += 1;
     return acc;

@@ -1,7 +1,13 @@
 import fs from 'fs';
 import path from 'path';
 import fetchInput from 'src/helper/fetchInput';
-import { buildDiagram, getSumOfDangerousPoints, parseInput } from './main';
+import {
+  buildDiagram,
+  buildDiagramWithDiagonals,
+  getSumOfDangerousPoints,
+  getSumOfDangerousPointsWithDiagonals,
+  parseInput,
+} from './main';
 
 const fetchExampleInput = () =>
   fs.readFileSync(path.resolve(__dirname, './example.input.txt'), 'utf-8');
@@ -86,14 +92,45 @@ test('build diagram with exemple input', () => {
     [2, 2, 2, 1, 1, 1, 0, 0, 0, 0],
   ]);
 });
+
+test('build diagram with exemple input diagonals', () => {
+  const input = fetchExampleInput();
+  const coordsList = parseInput(input);
+  const diagram = buildDiagramWithDiagonals(coordsList);
+
+  expect(diagram).toEqual([
+    [1, 0, 1, 0, 0, 0, 0, 1, 1, 0],
+    [0, 1, 1, 1, 0, 0, 0, 2, 0, 0],
+    [0, 0, 2, 0, 1, 0, 1, 1, 1, 0],
+    [0, 0, 0, 1, 0, 2, 0, 2, 0, 0],
+    [0, 1, 1, 2, 3, 1, 3, 2, 1, 1],
+    [0, 0, 0, 1, 0, 2, 0, 0, 0, 0],
+    [0, 0, 1, 0, 0, 0, 1, 0, 0, 0],
+    [0, 1, 0, 0, 0, 0, 0, 1, 0, 0],
+    [1, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+    [2, 2, 2, 1, 1, 1, 0, 0, 0, 0],
+  ]);
+});
+
 test('day 5 - 1 test input works', () => {
   const input = fetchExampleInput();
   const output = getSumOfDangerousPoints(input);
   expect(output).toMatchInlineSnapshot(`5`);
+});
+test('day 5 - 2 test input works', () => {
+  const input = fetchExampleInput();
+  const output = getSumOfDangerousPointsWithDiagonals(input);
+  expect(output).toMatchInlineSnapshot(`12`);
 });
 
 test('day 5 - 1 result', () => {
   const input = fetchInput(5);
   const output = getSumOfDangerousPoints(input);
   expect(output).toMatchInlineSnapshot(`7438`);
+});
+
+test('day 5 - 2 result', () => {
+  const input = fetchInput(5);
+  const output = getSumOfDangerousPointsWithDiagonals(input);
+  expect(output).toMatchInlineSnapshot(`21406`);
 });
