@@ -1,8 +1,8 @@
-export const parseInput = (input: string): number[] => {
+const parseInput = (input: string): number[] => {
   return input.split(',').map(Number);
 };
 
-export const updateLanternfishState = (fishes: number[]): number[] => {
+const updateLanternfishState = (fishes: number[]): number[] => {
   const newFishes: number[] = [];
   const updatedFishes = fishes.map((fish) => {
     if (fish === 0) {
@@ -14,8 +14,10 @@ export const updateLanternfishState = (fishes: number[]): number[] => {
   return [...updatedFishes, ...newFishes];
 };
 
-export const countFishes = (days: number, fishes: number[]): number => {
+const countFishes = (days: number, fishes: number[]): number => {
   if (days === 0) return fishes.length;
   const updatedFishes = updateLanternfishState(fishes);
   return countFishes(days - 1, updatedFishes);
 };
+
+export { countFishes, parseInput, updateLanternfishState };
